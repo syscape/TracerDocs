@@ -66,7 +66,17 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href="./">Logger</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#basic-usage">Basic Usage</a>
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#logginginterface">LoggingInterface</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#logerror">logError()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#loginfo">logInfo()</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#logdebug">logDebug()</a>
+    </li>
+        </ul>
     </li>
     </ul>
                     </li>
@@ -111,23 +121,38 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="logger">Logger</h1>
+                <h1 id="tracerlogger">TracerLogger</h1>
 <hr />
-<h6 id="basic-usage">Basic Usage</h6>
-<pre><code class="language-Python">    from Logger.logger import TracerLogger
-    logger = TracerLogger('logger1')
-    logger.create_file_handler(logger_format=&quot;%(message)s&quot;,logger_file='info.log',handler_level='info')
-    logger.log_info_message('Logging message')
+<p>This Document explains <strong>Internal Working</strong> as well as <strong>Usage</strong> of TracerLogger <br><br></p>
+<h2 id="overview">Overview</h2>
+<p>TracerLogger is nothing but a Mapper which maps <code>Interface</code> to <a href="./#logginginterface"><code>LoggingInterface</code></a>. Whenever a <code>log</code> request is received, it identifies associated LoggingInterface and forwards that request to that interface.</p>
+<blockquote>
+<p><strong> Note </strong> <br>
+Main logic stays in LoggingInterface. TracerLogger is just a manager for these interfaces. </p>
+</blockquote>
+<p><img alt="OverallArchitecture" src="/assets/logger/architecture.png" /></p>
+<pre><code class="language-Python">from Logger import TracerLogger, LoggingInterface
+logger = TracerLogger()
+logger.logError('InterfaceName', 'Message', 'UniqueKey')
 </code></pre>
-<p>There are 4 types of logging levels: </p>
-<pre><code>'info', 'debug', 'warn', 'error'
-</code></pre>
-<p>There are two types of handlers which have been implemented:</p>
-<pre><code>a) FileHandler: Logs outputs to a log file.
-b) StreamHandler: Logs output to console.
-</code></pre>
-<p>Logger returns  "Level not implemented"  Exception if no handler is added.</p>
 <hr />
+<h2 id="logginginterface">LoggingInterface</h2>
+<p>Whenever you write a large scale application, you split it into <code>layers</code>. Here, in Tracer, we refer each level as interface. Consider analogy from OSI model. Everything is segregated into levels. Here, in Tracer, levels or <em>Interfaces</em> are <code>Router</code>, <code>Interfaces</code>, <code>Data_Functions</code>. Each request has to go through there levels/Interface.<br>
+More details on levels mentioned here. <code>Link to be added later.</code></p>
+<p>So, TracerLogger takes in array if these interfaces so you don't have to manage location of log data and you dont waste time in finding your logs.</p>
+<pre><code class="language-Python">from Logger import LoggingInterface
+interface = LoggingInterface('Name')
+</code></pre>
+<p>Now, every <code>LoggingInterface</code> as three logging levels implemented, namely <code>Error</code>, <code>Info</code>, <code>Debug</code>. Each logging level has a separate file and is continuosly </p>
+<h3 id="logerror">logError()</h3>
+<p><strong>LoggingInterface.errorLog(message, uniqueid)</strong> <br>
+This method will write to file <code>/logs/interfacename/error.log</code></p>
+<h3 id="loginfo">logInfo()</h3>
+<p><strong>LoggingInterface.logInfo(message, uniqueid)</strong> <br>
+This method will write to file <code>/logs/interfacename/info.log</code></p>
+<h3 id="logdebug">logDebug()</h3>
+<p><strong>LoggingInterface.logDebug(message, uniqueid)</strong> <br>
+This method will write to file <code>/logs/interfacename/debug.log</code></p>
               
             </div>
           </div>
