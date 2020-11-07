@@ -78,6 +78,14 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#loggerquery">LoggerQuery</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-re-create-loggingmaps-and-re-initialize-some-parts">1. Re-create LoggingMaps and Re-Initialize some parts.</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-answer-queries">2. Answer Queries.</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -153,6 +161,37 @@ This method will write to file <code>/logs/interfacename/info.log</code></p>
 <h3 id="logdebug">logDebug()</h3>
 <p><strong>LoggingInterface.logDebug(message, uniqueid)</strong> <br>
 This method will write to file <code>/logs/interfacename/debug.log</code></p>
+<hr />
+<h2 id="loggerquery">LoggerQuery</h2>
+<p>This class will be used to track errors. It will allow user to do basic querying over their log files.</p>
+<p>This class's functionality is divided into two parts:
+1. Re-create logging maps and re-initialize some parts.
+2. Answer to queries.</p>
+<h3 id="1-re-create-loggingmaps-and-re-initialize-some-parts">1. Re-create LoggingMaps and Re-Initialize some parts.</h3>
+<p>This is done because <code>LoggingInterface</code> and <code>LoggerQuery</code> my be on different memory since, user may not necessarily create <code>LoggerQuery</code> in same program.
+Also, by doing this step, <code>LoggerQuery</code> becomes stateless, i. e. it will not depend on runnning instance and can be used as "tool".</p>
+<p><em><strong>Working :</strong></em>
+As soon as instance is created, we scan for all existing folders in <code>/logs/</code>. This will give us interfaces which were created, since, each interface has its own folder.
+Once we have array of interface names, we initialise indivisual logging instance and create a map with key as <code>InterfaceName</code> and value as reference to <code>LoggingInterface</code>. By doing this, we have statelessly generated most of the contents of <code>TracerLogger</code> which was used while creating logs, or in case of server, which is being used while creating log <strong>Statelesly</strong>!!</p>
+<p><strong>Note that everything mentioned above is a part of constructor and no public methods are expected in this case</strong></p>
+<h3 id="2-answer-queries">2. Answer Queries.</h3>
+<p>This functionality will be responsible for efficient delivery of collected logs.</p>
+<p><em><strong>LoggerQuery.traceByID(uniqueid, startTime=None, endTime=None)</strong></em> : <br>
+* Used for tracing a request. <br>
+* Returns Map with key being <code>InterfaceName</code> and value being Map with key being LogLevel and value Being list of Logs collected in given time range.(If any. Else everything will be returned). <br>
+* <em><strong>Working :</strong></em> We traverse through all files using <code>filehandlers</code> associated with <code>LoggingInterface</code> in re-created Map. Then, using <code>Regex</code>, we get data into memory, filter out time constraints and return it. Once everything is collected, we map it according to return type in above point and return. <strong>Note: Task of serving those files is left on caller.</strong>
+<br><br></p>
+<p><em><strong>LoggerQuery.trackAllErrors(startTime=None, endTime=None)</strong></em> : <br>
+* Used for tracking all Errors. <br>
+* Returns a Map with key being <code>InterfaceName</code> and value being list of all errors under that interface.
+* <em><strong>Working :</strong></em> We traverse through filehandlers associated with interfaces and read and parse all <code>error.log</code> file. Then we filter out according to given time constraints, arrange according to return value mentioned and return.
+<br><br></p>
+<p><em><strong>LoggerQuery.trackAllInfo(startTime=None, endTime=None)</strong></em> : <br>
+* Same as above.
+<br><br></p>
+<p><em><strong>LoggerQuery.trackAllDebug(startTime=None, endTime=None)</strong></em> : <br>
+* Same as above.
+<br><br></p>
               
             </div>
           </div>
