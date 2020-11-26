@@ -98,6 +98,8 @@
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#response_4">Response</a>
     </li>
+    <li class="toctree-l3"><a class="reference internal" href="#response_5">Response</a>
+    </li>
         </ul>
     </li>
     </ul>
@@ -268,12 +270,61 @@ If Url Validation Fail:
 <pre><code class="language-Json">If Urls Under User Fetched Success:
 {
     &quot;STATUS&quot; : &quot;OK&quot;,
-    &quot;DATA&quot; : &quot;&lt;data&gt;&quot;
+    &quot;DATA&quot; : [
+        {
+            &quot;_id&quot;:&quot;&lt;urlid&gt;&quot;,
+            &quot;redirect_url&quot;:&quot;&lt;redirect target&gt;&quot;,
+            &quot;created_date&quot;:&quot;&lt;timestamp&gt;&quot;,
+            &quot;hits&quot;:&quot;&lt;total hits&gt;&quot;
+        }
+        .
+        .
+    ]
 }
 If Urls Under User Fetched Fail:
 {
     &quot;STATUS&quot; : &quot;FAIL&quot;
 }
+</code></pre>
+<p><code>Get /url/:id</code></p>
+<h5 id="response_5">Response</h5>
+<pre><code class="language-Json">{
+    &quot;STATUS&quot;:&quot;OK&quot;,
+    &quot;DATA&quot; : [
+        {
+            &quot;redirect_url&quot;:&quot;&lt;redirect target&gt;&quot;,
+            &quot;created_date&quot;:&quot;&lt;timestamp&gt;&quot;,
+            &quot;hits&quot;:&quot;&lt;total hits&gt;&quot;,
+            &quot;COLLECTED_DATA&quot; : [
+                {
+                    &quot;battery&quot;: battery,
+                    &quot;platform&quot;: platform,
+                    &quot;language&quot;: language,
+                    &quot;userAgent&quot;: user_agent,
+                    &quot;availableRam&quot;: available_ram,
+                    &quot;availableCores&quot;: available_cores,
+                    &quot;locationData&quot; : {
+                        &quot;city&quot; : city,
+                        &quot;region&quot;: region,
+                        &quot;postal&quot; : postal,
+                        &quot;org&quot; : isp,
+                        &quot;location&quot;: {
+                            &quot;lat&quot;:latitude,
+                            &quot;long&quot;:longitude
+                        }
+                    }
+                }
+                .
+                .
+                .
+            ]
+        }
+        .
+        .
+        .
+    ]
+}
+
 </code></pre>
 <hr />
               
