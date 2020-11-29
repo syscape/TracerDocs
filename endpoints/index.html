@@ -78,8 +78,6 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#headers_2">Headers</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#payload_2">Payload</a>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#response_2">Response</a>
     </li>
         </ul>
@@ -88,17 +86,25 @@
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#headers_3">Headers</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#payload_3">Payload</a>
+    <li class="toctree-l3"><a class="reference internal" href="#payload_2">Payload</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#response_3">Response</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#headers_4">Headers</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#payload_4">Payload</a>
-    </li>
     <li class="toctree-l3"><a class="reference internal" href="#response_4">Response</a>
     </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#specific-url">Specific URL</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#headers_5">Headers</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#response_5">Response</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#headers_6">Headers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#response_6">Response</a>
     </li>
         </ul>
     </li>
@@ -188,6 +194,7 @@ If Login Fail:
 <p><code>Content-Type: application/json</code> </p>
 <h6 id="payload_1">Payload</h6>
 <pre><code class="language-Json">{
+    &quot;name&quot; : &quot;&lt;name&gt;&quot;,
     &quot;email&quot; : &quot;&lt;email&gt;&quot;,
     &quot;password&quot; : &quot;&lt;password&gt;&quot;
 }
@@ -195,7 +202,8 @@ If Login Fail:
 <h6 id="response_1">Response</h6>
 <pre><code class="language-Json">If Email Verification Fail:
 {
-    &quot;STATUS&quot; : &quot;FAIL&quot;
+    &quot;STATUS&quot; : &quot;FAIL&quot;,
+    &quot;ERROR&quot; : &quot;&quot;
 }
 
 If Password Validation Fail:
@@ -216,14 +224,10 @@ If All Above Validation Success:
 </code></pre>
 <hr />
 <h3 id="topup">Topup</h3>
+<p><code>POST /topup</code></p>
 <h6 id="headers_2">Headers</h6>
 <p><code>Content-Type: application/json</code> 
 <code>Token : &lt;accesstoken&gt;</code></p>
-<h6 id="payload_2">Payload</h6>
-<pre><code class="language-Json">{
-    &quot;user_id&quot; : &quot;&lt;user_id&gt;&quot;
-}
-</code></pre>
 <h6 id="response_2">Response</h6>
 <pre><code class="language-Json">If Topup Success:
 {
@@ -241,7 +245,7 @@ If Topup Fail (Less than 20 minutes delay between 2 topups):
 <h6 id="headers_3">Headers</h6>
 <p><code>Content-Type: application/json</code> 
 <code>Token : &lt;accesstoken&gt;</code></p>
-<h6 id="payload_3">Payload</h6>
+<h6 id="payload_2">Payload</h6>
 <pre><code class="language-Json">{
     &quot;redirect_url&quot; : &quot;&lt;redirect_url&gt;&quot;
 }
@@ -257,15 +261,10 @@ If Url Validation Fail:
     &quot;URL_ID&quot; : &quot;&lt;url_id&gt;&quot;
 }
 </code></pre>
-<p><code>Get /url</code></p>
+<p><code>GET /url</code></p>
 <h6 id="headers_4">Headers</h6>
 <p><code>Content-Type: application/json</code> 
 <code>Token : &lt;accesstoken&gt;</code></p>
-<h6 id="payload_4">Payload</h6>
-<pre><code class="language-Json">{
-    &quot;user_id&quot; : &quot;&lt;user_id&gt;&quot;
-}
-</code></pre>
 <h6 id="response_4">Response</h6>
 <pre><code class="language-Json">If Urls Under User Fetched Success:
 {
@@ -286,45 +285,59 @@ If Urls Under User Fetched Fail:
     &quot;STATUS&quot; : &quot;FAIL&quot;
 }
 </code></pre>
-<p><code>Get /url/:id</code></p>
+<hr />
+<h3 id="specific-url">Specific URL</h3>
+<p><code>GET /url/data/:id</code></p>
+<h5 id="headers_5">Headers</h5>
+<p><code>Content-Type: application/json</code>
+<code>token: &lt;accesstoken&gt;</code></p>
 <h5 id="response_5">Response</h5>
 <pre><code class="language-Json">{
     &quot;STATUS&quot;:&quot;OK&quot;,
     &quot;DATA&quot; : [
         {
-            &quot;redirect_url&quot;:&quot;&lt;redirect target&gt;&quot;,
-            &quot;created_date&quot;:&quot;&lt;timestamp&gt;&quot;,
-            &quot;hits&quot;:&quot;&lt;total hits&gt;&quot;,
-            &quot;COLLECTED_DATA&quot; : [
-                {
-                    &quot;battery&quot;: battery,
-                    &quot;platform&quot;: platform,
-                    &quot;language&quot;: language,
-                    &quot;userAgent&quot;: user_agent,
-                    &quot;availableRam&quot;: available_ram,
-                    &quot;availableCores&quot;: available_cores,
-                    &quot;locationData&quot; : {
-                        &quot;city&quot; : city,
-                        &quot;region&quot;: region,
-                        &quot;postal&quot; : postal,
-                        &quot;org&quot; : isp,
-                        &quot;location&quot;: {
-                            &quot;lat&quot;:latitude,
-                            &quot;long&quot;:longitude
-                        }
-                    }
+            &quot;_id&quot;: uniqueid(collection id for mongodb),
+            &quot;battery&quot;: battery,
+            &quot;platform&quot;: platform,
+            &quot;language&quot;: language,
+            &quot;userAgent&quot;: user_agent,
+            &quot;availableRam&quot;: available_ram,
+            &quot;availableCores&quot;: available_cores,
+            &quot;locationData&quot; : {
+                &quot;city&quot; : city,
+                &quot;region&quot;: region,
+                &quot;postal&quot; : postal,
+                &quot;org&quot; : isp,
+                &quot;location&quot;: {
+                    &quot;lat&quot;:latitude,
+                    &quot;long&quot;:longitude
                 }
-                .
-                .
-                .
-            ]
+            }
+        }
+        .
+        .
+        .    
+    ]
+}
+</code></pre>
+<p><code>GET /url/locations/:id</code></p>
+<h5 id="headers_6">Headers</h5>
+<p><code>Content-Type: application/json</code>
+<code>token: &lt;accesstoken&gt;</code></p>
+<h5 id="response_6">Response</h5>
+<pre><code class="language-Json">{
+    &quot;STATUS&quot; : &quot;OK&quot;,
+    &quot;DATA&quot; : [
+        {
+            &quot;_id&quot; : uniqueid(collection id for mongodb),
+            &quot;lat&quot; : latitude,
+            &quot;long&quot;: longitude
         }
         .
         .
         .
     ]
 }
-
 </code></pre>
 <hr />
               
